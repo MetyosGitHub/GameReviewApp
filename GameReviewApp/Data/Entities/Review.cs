@@ -13,6 +13,7 @@ namespace GameReviewApp.Data.Entities
         [Required]
         public string Description { get; set; }
         [Required]
+        [NotMapped]
         public DateOnly DateOnly { get; set; }
         [Required]
         public string UserId { get; init; }

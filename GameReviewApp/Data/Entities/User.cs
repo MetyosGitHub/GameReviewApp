@@ -11,17 +11,17 @@ namespace GameReviewApp.Data.Entities
         public string Name { get; set; }
         [Required]
         public IList<Review> Reviews { get; set; } = new List<Review>();
-        
+        [NotMapped]
         public IFormFile Picture { get; set; }
         [Required]
         public int ToPlayBoardId { get; set; }
         [Required]
-        [ForeignKey(nameof(ToPlayBoardId))]
+        
         public ToPlayBoard ToPlayBoard { get; set; }
         [Required]
         public int DoneBoardId { get; set; }
         [Required]
-        [ForeignKey(nameof(ToPlayBoardId))]
+        
         public DoneBoard DoneBoard { get; set; }
 
 

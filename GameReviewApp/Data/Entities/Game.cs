@@ -18,8 +18,10 @@ namespace GameReviewApp.Data.Entities
         [Required]
         public IList<Review> Reviews { get; set; } = new List<Review>();
         [Required]
+        [NotMapped]
         public IFormFile Picture { get; set; }
         [Required]
+
         public int GenreId { get; set; }
         [Required]
         [ForeignKey(nameof(GenreId))]

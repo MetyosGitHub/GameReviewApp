@@ -4,6 +4,7 @@ using GameReviewApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameReviewApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221202221434_MyMigrationTwo")]
+    partial class MyMigrationTwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,14 +32,7 @@ namespace GameReviewApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("DoneBoards");
                 });
@@ -172,14 +167,7 @@ namespace GameReviewApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("ToPlayBoards");
                 });
@@ -256,6 +244,8 @@ namespace GameReviewApp.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ToPlayBoardId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -397,17 +387,6 @@ namespace GameReviewApp.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GameReviewApp.Data.Entities.DoneBoard", b =>
-                {
-                    b.HasOne("GameReviewApp.Data.Entities.User", "User")
-                        .WithOne("DoneBoard")
-                        .HasForeignKey("GameReviewApp.Data.Entities.DoneBoard", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GameReviewApp.Data.Entities.Game", b =>
                 {
                     b.HasOne("GameReviewApp.Data.Entities.DoneBoard", null)
@@ -450,15 +429,23 @@ namespace GameReviewApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GameReviewApp.Data.Entities.ToPlayBoard", b =>
+            modelBuilder.Entity("GameReviewApp.Data.Entities.User", b =>
                 {
-                    b.HasOne("GameReviewApp.Data.Entities.User", "User")
-                        .WithOne("ToPlayBoard")
-                        .HasForeignKey("GameReviewApp.Data.Entities.ToPlayBoard", "UserId")
+                    b.HasOne("GameReviewApp.Data.Entities.DoneBoard", "DoneBoard")
+                        .WithMany()
+                        .HasForeignKey("ToPlayBoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("GameReviewApp.Data.Entities.ToPlayBoard", "ToPlayBoard")
+                        .WithMany()
+                        .HasForeignKey("ToPlayBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DoneBoard");
+
+                    b.Navigation("ToPlayBoard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -539,13 +526,7 @@ namespace GameReviewApp.Data.Migrations
 
             modelBuilder.Entity("GameReviewApp.Data.Entities.User", b =>
                 {
-                    b.Navigation("DoneBoard")
-                        .IsRequired();
-
                     b.Navigation("Reviews");
-
-                    b.Navigation("ToPlayBoard")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -23,25 +23,13 @@ namespace GameReviewApp.Data
         {
             
 
-
+            
 
 
 
             base.OnModelCreating(builder);
 
-            builder
-                .Entity<Game>()
-                .HasOne(b => b.Publisher)
-                .WithMany(b => b.Games)
-                .HasForeignKey(p => p.PublisherId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-               .Entity<Genre>()
-               .HasMany(g => g.Games)
-               .WithOne(t => t.Genre)
-               .HasForeignKey(k => k.GenreId)
-               .OnDelete(DeleteBehavior.Restrict);
+           
         }
     }
 }
